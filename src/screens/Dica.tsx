@@ -1,10 +1,10 @@
-// despesas.js
 import React from 'react';
+import { View, Text } from 'react-native';
 
-const dica = () => (
-  <div>
-    <h1>dica Page</h1>
-  </div>
+const Dica = () => (
+  <View>
+    <Text>Dica Screen 111</Text>
+  </View>
 );
 
-export default dica;
+export default Dica;

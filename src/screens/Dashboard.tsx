@@ -1,10 +1,10 @@
-// despesas.js
 import React from 'react';
+import { View, Text } from 'react-native';
 
-const das = () => (
-  <div>
-    <h1>Despesas Page</h1>
-  </div>
+const Dashboard = () => (
+  <View>
+    <Text>Dashboard Screen 111</Text>
+  </View>
 );
 
-export default das;
+export default Dashboard;

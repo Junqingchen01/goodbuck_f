@@ -1,10 +1,10 @@
-// despesas.js
 import React from 'react';
+import { View, Text } from 'react-native';
 
-const chat = () => (
-  <div>
-    <h1>chat Page</h1>
-  </div>
+const Chat = () => (
+  <View>
+    <Text>Chat Screen 111</Text>
+  </View>
 );
 
-export default chat;
+export default Chat;
