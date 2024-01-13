@@ -1,25 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-type DespesaProps = {
-    despesa: {
-      id: number;
-      Category: string;
-      PaymentMethod: string;
-      Amount: number;
-    };
-  }
-
-  const Despesa: React.FC<DespesaProps> = ({ despesa }) => {
-    return (
-      <View style={styles.container}>
-        <Text>{despesa.id}</Text>
-        <Text>{despesa.Category}</Text>
-        <Text>{despesa.PaymentMethod}</Text>
-        <Text>{despesa.Amount}</Text>
-      </View>
-    );
+interface DespesaProps {
+  despesa: {
+    id: number;
+    Category: string;
+    PaymentMethod: string;
+    Amount: number;
   };
+}
+
+const Despesa: React.FC<DespesaProps> = ({ despesa }) => {
+  return (
+    <View style={styles.container}>
+      <Text>ID: {despesa.id}</Text>
+      <Text>Category: {despesa.Category}</Text>
+      <Text>Payment Method: {despesa.PaymentMethod}</Text>
+      <Text>Amount: {despesa.Amount}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

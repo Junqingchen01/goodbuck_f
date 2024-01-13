@@ -7,13 +7,17 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Dashboard from './src/screens/Dashboard';
-import Chat from './src/screens/Chat';
+import DashboardScreens from './src/screens/DashboardScreens';
+import ChatScreens from './src/screens/ChatScreens';
 import DespesasScreen from './src/screens/DespesasScreens';
-import Dica from './src/screens/Dica';
-import Setting from './src/screens/Setting';
+import DicaScreens from './src/screens/DicaScreens';
+import SettingScreens from './src/screens/SettingScreens';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen  from './src/screens/RegisterScreen ';
+import MetasScreens  from './src/screens/MetasScreens';
+
+import AddDespesa from './src/screens/AddDespesa';
+import AddMeta from './src/screens/AddMeta';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,10 +45,10 @@ const MyTabs = () => (
     })}
   >
     <Tab.Screen name="Despesas" component={DespesasScreen} />
-    <Tab.Screen name="Dashboard" component={Dashboard} />
-    <Tab.Screen name="Chat" component={Chat} />
-    <Tab.Screen name="Dica" component={Dica} />
-    <Tab.Screen name="Setting" component={Setting} />
+    <Tab.Screen name="Dashboard" component={DashboardScreens} />
+    <Tab.Screen name="Chat" component={ChatScreens} />
+    <Tab.Screen name="Dica" component={DicaScreens} />
+    <Tab.Screen name="Setting" component={SettingScreens} />
   </Tab.Navigator>
 );
 
@@ -69,8 +73,10 @@ const MyStack = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen}
-        />
+        <Stack.Screen name="Register" component={RegisterScreen}/>
+        <Stack.Screen name="Metas" component={MetasScreens}/>
+        <Stack.Screen name="AddDespesa" component={AddDespesa}/>
+        <Stack.Screen name="AddMeta" component={AddMeta}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

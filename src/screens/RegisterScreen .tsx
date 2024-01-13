@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    color: '#3E198C',
+
   },
   input: {
     height: 40,

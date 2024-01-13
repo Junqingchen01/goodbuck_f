@@ -23,16 +23,17 @@ const LoginScreen = () => {
           Password: password,
         }),
       });
-
+  
       if (response.ok) {
         const result = await response.json();
         const token = result.token;
-
-        Alert.alert('Login Successful');
+  
+        await AsyncStorage.removeItem('token');
+  
         await AsyncStorage.setItem('token', token);
-
+  
+        Alert.alert('Login Successful');
         navigation.navigate('Home');
-
       } else {
         Alert.alert('Login Failed', 'Invalid username or password');
       }
@@ -41,6 +42,7 @@ const LoginScreen = () => {
       Alert.alert('Error', 'An error occurred during login');
     }
   };
+  
 
   const gotoRegistar = () => {
     navigation.navigate('Register');
@@ -85,6 +87,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    color: '#3E198C',
+
   },
   input: {
     height: 40,
