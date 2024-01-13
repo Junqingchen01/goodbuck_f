@@ -7,7 +7,7 @@ import { Image } from 'react-native';
 
 import Dashboard from './src/screens/Dashboard';
 import Chat from './src/screens/Chat';
-import Despesas from './src/screens/Despesas';
+import DespesasScreens from './src/screens/DespesasScreens';
 import Dica from './src/screens/Dica';
 import Setting from './src/screens/Setting';
 
@@ -36,7 +36,7 @@ const MyTabs = () => (
       },
     })}
   >
-    <Tab.Screen name="Despesas" component={Despesas} />
+    <Tab.Screen name="Despesas" component={DespesasScreens} />
     <Tab.Screen name="Dashboard" component={Dashboard} />
     <Tab.Screen name="Chat" component={Chat} />
     <Tab.Screen name="Dica" component={Dica} />
