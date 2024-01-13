@@ -1,15 +1,19 @@
+// app.tsx
+
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Dashboard from './src/screens/Dashboard';
 import Chat from './src/screens/Chat';
-import DespesasScreens from './src/screens/DespesasScreens';
+import DespesasScreen from './src/screens/DespesasScreens';
 import Dica from './src/screens/Dica';
 import Setting from './src/screens/Setting';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen  from './src/screens/RegisterScreen ';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,7 +40,7 @@ const MyTabs = () => (
       },
     })}
   >
-    <Tab.Screen name="Despesas" component={DespesasScreens} />
+    <Tab.Screen name="Despesas" component={DespesasScreen} />
     <Tab.Screen name="Dashboard" component={Dashboard} />
     <Tab.Screen name="Chat" component={Chat} />
     <Tab.Screen name="Dica" component={Dica} />
@@ -45,13 +49,27 @@ const MyTabs = () => (
 );
 
 const MyStack = () => {
+  const [initialRoute, setInitialRoute] = React.useState('Login');
+
+  React.useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setInitialRoute(token ? 'Home' : 'Login');
+    };
+
+    checkLoginStatus();
+  }, []);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen
           name="Home"
-          component={MyTabs} 
+          component={MyTabs}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

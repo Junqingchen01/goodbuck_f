@@ -1,54 +1,46 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
-import { TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
-
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const navigation = useNavigation();
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const response = await fetch('http://192.168.3.11:3000/perfil/login', {
+      const response = await fetch('http://192.168.3.11:3000/perfil/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           Name: username,
+          Email: email,
           Password: password,
         }),
       });
-
+  
       if (response.ok) {
-        const result = await response.json();
-        const token = result.token;
-
-        Alert.alert('Login Successful');
-        await AsyncStorage.setItem('token', token);
-
-        navigation.navigate('Home');
-
+        Alert.alert('Register Successful', 'User created');
+        setUsername('');
+        setPassword('');
+        setEmail('');
+        navigation.navigate('Login');
       } else {
-        Alert.alert('Login Failed', 'Invalid username or password');
+        Alert.alert('Register Failed', 'Invalid username or password');
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      Alert.alert('Error', 'An error occurred during login');
+      console.error('Error during register:', error);
+      Alert.alert('Error', 'An error occurred during register');
     }
   };
-
-  const gotoRegistar = () => {
-    navigation.navigate('Register');
-  }
+  
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo de volta!</Text>
+      <Text style={styles.title}>Bem-vindo à Goodbuck!</Text>
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -62,22 +54,25 @@ const LoginScreen = () => {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-        <Text style={styles.btntext} >Login</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.btn} onPress={gotoRegistar}>
-        <Text style={styles.btntext} >Registar</Text>
+       <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TouchableOpacity style={styles.btn} onPress={handleRegister}>
+        <Text style={styles.btntext}>Registrar</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignContent:'center',
+    alignContent: 'center',
     padding: 16,
   },
   title: {
@@ -88,12 +83,12 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: '#3E198C', 
-    borderWidth: 2, 
+    borderColor: '#3E198C',
+    borderWidth: 2,
     borderRadius: 10,
     marginBottom: 12,
     paddingHorizontal: 8,
-    backgroundColor: '#E8CBF6', 
+    backgroundColor: '#E8CBF6',
   },
   btn:{
     justifyContent: 'center',
@@ -107,8 +102,7 @@ const styles = StyleSheet.create({
     width: 238,
     height: 50,
     
-  },
-  btntext:{
+  }, btntext:{
     color: '#3E198C',
     fontSize: 20,
     textAlign: 'center', 
@@ -116,6 +110,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '700',
   }
+  
 });
 
-export default LoginScreen;
+export default RegisterScreen;

@@ -6,7 +6,7 @@ import Despesas from './DespesasScreens';
 import Metas from './Metas'; 
 
 
-const DespesasScreens = () => {
+const DespesasScreen = () => {
   const navigation = useNavigation();
   
   const goToDespesas = () => {
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DespesasScreens;
+export default DespesasScreen;
