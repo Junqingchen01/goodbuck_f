@@ -5,16 +5,12 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Despesas from './DespesasScreens'; 
 import Metas from './Metas'; 
 
+import despesa from '../components/despesa';
+
+
 
 const DespesasScreen = () => {
   const navigation = useNavigation();
-  
-  const goToDespesas = () => {
-    
-      navigation.navigate('Despesas'); 
-    
-  };
-
   const goToMetas = () => {
     
       navigation.navigate('Metas');
@@ -26,7 +22,7 @@ const DespesasScreen = () => {
       <View style={styles.containerbtn}>
         <TouchableOpacity
           style={[styles.button, styles.leftButton]}
-          onPress={goToDespesas}
+          
         >
           <Text style={styles.buttonText}>Transações</Text>
         </TouchableOpacity>
