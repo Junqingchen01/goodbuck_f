@@ -1,13 +1,12 @@
-// Settings.js
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
-const SettingsScreen = () => {
-  const navigation = useNavigation();
+
+const PerfilScreen = () => {
   const [userData, setUserData] = useState({});
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchUserData();
@@ -38,37 +37,34 @@ const SettingsScreen = () => {
     }
   };
 
-  // const goToNotifications = () => {
-  //   navigation.navigate('Notifications');
-  // };
-
-  const goToPerfil = () => {
-    navigation.navigate('Perfil');
+  const handleUpdateProfile = () => {
+    navigation.navigate('EditarPerfil');
   };
 
-  const goToDefinicoes = () => {
-    navigation.navigate('Definicoes');
+  const handleLogout = async () => {
+    navigation.navigate('Login');
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.notificationIcon}>
-        <Image source={require('../assets/bell7.png')} />
-      </TouchableOpacity>
       <View style={styles.userDetails}>
-      <Image
-          source={userData.Avatar ? { uri: userData.Avatar } : require('../assets/unknowicon.png')}
-          style={styles.avatar}
-        />
+        <Image  source={userData.Avatar == null ? { uri: userData.Avatar } : require('../assets/unknowicon.png')}
+        style={styles.avatar} />
         <Text style={styles.userName}>{userData.Name}</Text>
         <Text style={styles.accountType}>
           Account Type: {userData.AccountType ? userData.AccountType : 'FREE'}
         </Text>
-        <TouchableOpacity style={styles.settingsOption} onPress={goToPerfil}>
-          <Text>Perfil</Text>
+        <View style={styles.perfilcontainer}>
+            <Text>Email: {userData.Email}</Text>
+            <Text>Currency Unit: {userData.CurrencyUnit}</Text>
+            <Text>User Type: {userData.UserType}</Text>
+        </View>
+
+        <TouchableOpacity style={styles.actionButton} onPress={handleUpdateProfile}>
+          <Text>Editar Perfil</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.settingsOption} onPress={goToDefinicoes}>
-          <Text>Definicoes</Text>
+        <TouchableOpacity style={styles.actionButton} onPress={handleLogout}>
+          <Text>Terminar Sessão</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -79,12 +75,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-  },
-  notificationIcon: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 1,
   },
   userDetails: {
     alignItems: 'center',
@@ -107,15 +97,28 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#3E198C',
   },
-  settingsOption: {
-    width: 150,
-    height: 57,
+  actionButton: {
+    padding: 10,
+    width: 160,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
-    borderWidth: 4,
+    borderWidth: 5,
     borderColor: '#3E198C',
-  },
+    color: '#3E198C',
+    fontSize: 30,
+    
+  },perfilcontainer:{
+    marginTop: 10,
+    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#3E198C',
+    fontSize: 30,
+    fontWeight: 'bold',
+
+  }
 });
 
-export default SettingsScreen;
+export default PerfilScreen;

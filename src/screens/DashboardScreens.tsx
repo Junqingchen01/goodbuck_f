@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const Dashboard = () => (
+const DashboardScreens = () => (
   <View>
-    <Text>Dashboard Screen 111</Text>
+    <Text>dashboard Screen 111</Text>
   </View>
 );
 
-export default Dashboard;
+export default DashboardScreens;

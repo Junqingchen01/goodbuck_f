@@ -19,6 +19,10 @@ import MetasScreens  from './src/screens/MetasScreens';
 import AddDespesa from './src/screens/AddDespesa';
 import AddMeta from './src/screens/AddMeta';
 
+import Perfil from './src/screens/Perfil';
+import Definicoes from './src/screens/Definicoes';
+import EditarPerfil from './src/screens/EditarPerfil';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -77,6 +81,9 @@ const MyStack = () => {
         <Stack.Screen name="Metas" component={MetasScreens}/>
         <Stack.Screen name="AddDespesa" component={AddDespesa}/>
         <Stack.Screen name="AddMeta" component={AddMeta}/>
+        <Stack.Screen name="Perfil" component={Perfil}/>
+        <Stack.Screen name="Definicoes" component={Definicoes}/>
+        <Stack.Screen name="EditarPerfil" component={EditarPerfil}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

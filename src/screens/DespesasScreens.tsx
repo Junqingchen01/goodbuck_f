@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFF7',
     height: 493,
+    width: 431,
   },
   button: {
     width: 150,
