@@ -48,7 +48,7 @@ const PerfilScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.userDetails}>
-        <Image  source={userData.Avatar == null ? { uri: userData.Avatar } : require('../assets/unknowicon.png')}
+        <Image  source={userData.Avatar ? { uri: userData.Avatar } : require('../assets/unknowicon.png')}
         style={styles.avatar} />
         <Text style={styles.userName}>{userData.Name}</Text>
         <Text style={styles.accountType}>

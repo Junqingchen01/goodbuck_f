@@ -1,18 +1,19 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable prettier/prettier */
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Meta from '../components/meta';
 
-const MetasScreens = () => {
+const MetasScreen = () => {
+  const navigation = useNavigation();
   const [metas, setMetas] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
         const response = await fetch('http://192.168.3.11:3000/metas', {
           method: 'GET',
           headers: {
@@ -20,31 +21,35 @@ const MetasScreens = () => {
             'Authorization': `Bearer ${token}`,
           },
         });
-
         if (response.ok) {
           const data = await response.json();
-          setMetas(data);
+          console.log(data);
+          setMetas(data.metas);
         } else {
           console.error('Error fetching metas:', response.status);
         }
-      } catch (error) {
-        console.error('Error during fetch:', error);
+      } else {
+        console.error('AsyncStorage cant find token');
       }
-    };
+    } catch (error) {
+      console.error('Error during fetch:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
-  const navigation = useNavigation();
+
   const goToDespesas = () => {
     navigation.navigate('Despesas');
   };
 
-  const goToAddDMeta = () => {
+  const goToAddMeta = () => {
     navigation.navigate('AddMeta');
   };
 
   return (
-    <View >
+    <View>
       <View style={styles.containerbtn}>
         <TouchableOpacity
           style={[styles.button, styles.rightButton]}
@@ -58,23 +63,33 @@ const MetasScreens = () => {
           <Text style={styles.buttonText}>Metas de Poupança</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.container}>
       <FlatList
+        style={{ maxHeight: 400 }} // max height
         data={metas}
-        keyExtractor={(item) => item._id.toString()}
-        renderItem={({ item }) => <Meta meta={item} />}
-      />
-    </View>
+        keyExtractor={(item) => item.MetaID.toString()}
+        renderItem={({ item }) => (
+          <View key={item.MetaID} style={styles.metaContainer}>
+            <Text>{`MetaID: ${item.MetaID}`}</Text>
+            <Text>{`Name: ${item.Name}`}</Text>
+            <Text>{`Description: ${item.Description}`}</Text>
+            <Text>{`Planned Contribution: ${item.PlannedContribution}`}</Text>
+            <Text>{`Current Contribution: ${item.CurrentContribution}`}</Text>
+            <Text>{`Start Date: ${item.StartDate}`}</Text>
+            <Text>{`End Date: ${item.EndDate}`}</Text>
+            <Text>{`Priority: ${item.Priority}`}</Text>
+            <Text>{'------------------------'}</Text>
+          </View>
+        )}
+/>
       <View style={styles.add}>
-      <TouchableOpacity
+        <TouchableOpacity
           style={[styles.button, styles.rightButton]}
-          onPress={goToAddDMeta}
+          onPress={goToAddMeta}
         >
           <Text style={styles.buttonText}>Adicionar nova meta</Text>
         </TouchableOpacity>
       </View>
     </View>
-    
   );
 };
 
@@ -84,14 +99,20 @@ const styles = StyleSheet.create({
     marginHorizontal: -6,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor:'#FFFFF7',
+    backgroundColor: '#FFFFF7',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFF7',
+    height: 493,
+    width: 431,
   },
   button: {
     width: 150,
     height: 57,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 50, 
+    borderRadius: 50,
     borderWidth: 4,
     borderColor: '#3E198C',
   },
@@ -106,14 +127,19 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#3E198C',
   },
-  add:{
+  add: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-  }, container: {
-    flex: 1,
-    padding: 16,
+  }, metaContainer: {
+    marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FFF', 
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#DDD',
   },
 });
 
-export default MetasScreens;
+export default MetasScreen;

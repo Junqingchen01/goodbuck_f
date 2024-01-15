@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DicaScreens = () => {
   const navigation = useNavigation();
   const [dicas, setDicas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchAllDica = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await fetch('http://192.168.3.11/dica/dica', {
+        const response = await fetch('http://192.168.3.11:3000/dica', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -20,7 +21,8 @@ const DicaScreens = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          setDicas(data);
+          console.log('Data:', data);
+          setDicas(data.dica|| []);
         } else {
           console.error('Error:', response.status);
         }
@@ -29,6 +31,8 @@ const DicaScreens = () => {
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
     }
   };
 
@@ -36,20 +40,8 @@ const DicaScreens = () => {
     fetchAllDica();
   }, []);
 
-  // const goToFavorito = () => {
-  //   // Navigate to Favorito screen
-  //   navigation.navigate('Favorito');
-  // };
-
-  const renderDicaItem = ({ item }) => (
-    <View style={styles.dicaItemContainer}>
-      <Text style={styles.dicaText}>{item.Title}</Text>
-      <Text style={styles.dicaText}>{item.Type}</Text>
-    </View>
-  );
-
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.containerbtn}>
         <TouchableOpacity style={[styles.button, styles.leftButton]}>
           <Text style={styles.buttonText}>Dica</Text>
@@ -58,13 +50,23 @@ const DicaScreens = () => {
           <Text style={styles.buttonText}>Favorito</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.container}>
+  
+      {loading ? (
+        <ActivityIndicator style={styles.loadingIndicator} size="large" color="#3E198C" />
+      ) : (
         <FlatList
           data={dicas}
-          renderItem={renderDicaItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.DicaID.toString()}
+          renderItem={({ item }) => (
+            <View key={item.DicaID} style={styles.dicaContainer}>
+              <Text>{`DicaID: ${item.DicaID}`}</Text>
+              <Text>{`Title: ${item.Title}`}</Text>
+              <Text>{`Content: ${item.Content}`}</Text>
+              <Text>{'------------------------'}</Text>
+            </View>
+          )}
         />
-      </View>
+      )}
     </View>
   );
 };
@@ -78,6 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFF7',
   },
   container: {
+    flex: 1, 
     marginVertical: 20,
     backgroundColor: '#FFFFF7',
   },
@@ -101,14 +104,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#3E198C',
   },
-  dicaItemContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+  dicaContainer: {
+    marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FFF', 
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#DDD',
   },
-  dicaText: {
-    fontSize: 16,
-    color: '#333333',
+  loadingIndicator: {
+    marginTop: 20,
   },
 });
 

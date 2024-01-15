@@ -1,9 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Despesa from '../components/despesa';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DespesasScreen = () => {
   const navigation = useNavigation();
@@ -18,11 +18,14 @@ const DespesasScreen = () => {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
+
           },
         });
         if (response.ok) {
           const data = await response.json();
-          setDespesas(data);
+          console.log(data.user.UserID);
+          setDespesas(data.user.Despesas); // Correção aqui
+          
         } else {
           console.error('Erro :', response.status);
           navigation.navigate('Login');
@@ -36,8 +39,9 @@ const DespesasScreen = () => {
   };
 
   useEffect(() => {
-    fetchData(); 
+    fetchData();
   }, []);
+  
 
   const goToMetas = () => {
     navigation.navigate('Metas');
@@ -60,16 +64,25 @@ const DespesasScreen = () => {
           <Text style={styles.buttonText}>Metas de Poupança</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.container}>
-        <Text>despesas</Text>
-        <FlatList
+      <FlatList
+          style={{ maxHeight: 400 }} // max height
           data={despesas}
-          renderItem={({ item }) => <Despesa despesa={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.DespesaID.toString()}
+          renderItem={({ item }) => (
+            <View key={item.DespesaID} style={styles.metaContainer}>
+              <Text>{`DespesaID: ${item.DespesaID}`}</Text>
+              <Text>{`Date: ${item.Date}`}</Text>
+              <Text>{`Category: ${item.Category}`}</Text>
+              <Text>{`Description: ${item.Description}`}</Text>
+              <Text>{`PaymentMethod: ${item.PaymentMethod}`}</Text>
+              <Text>{`Amount: ${item.Amount}`}</Text>
+              <Text>{'------------------------'}</Text>
+            </View>
+          )}
         />
-      </View>
+
       <View style={styles.add}>
-      <TouchableOpacity
+        <TouchableOpacity
           style={[styles.button, styles.rightButton]}
           onPress={goToAddDespesa}
         >
@@ -88,10 +101,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FFFFF7',
   },
-  container:{
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#FFFFF7',
     height: 493,
     width: 431,
@@ -115,11 +126,19 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#3E198C',
-  },add:{
+  }, add: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-  }
+  },metaContainer: {
+    marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FFF', 
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#DDD',
+  },
 });
 
 export default DespesasScreen;
