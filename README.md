@@ -49,8 +49,8 @@ This is one way to run your app — you can also run it directly from within And
 ## Step 3: Modifying your App
 
 # you can use this username and password login to the app
-username:chen
-password:chen
+# username:chen
+# password:chen
 
 Now that you have successfully run the app, let's modify it.
 
