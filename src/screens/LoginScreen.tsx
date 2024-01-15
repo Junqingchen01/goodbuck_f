@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent:'center',
     padding: 16,
+    backgroundColor: '#FFF5E8',
   },
   title: {
     fontSize: 24,
     marginBottom: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'center',
     color: '#3E198C',
 
   },
