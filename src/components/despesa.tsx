@@ -1,33 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface DespesaProps {
-  despesa: {
-    id: number;
-    Category: string;
-    PaymentMethod: string;
-    Amount: number;
-  };
-}
+const DespesaDetail = ({ route }) => {
+  const { DespesaID } = route.params;
+  const [despesaDetail, setDespesaDetail] = useState(null);
 
-const Despesa: React.FC<DespesaProps> = ({ despesa }) => {
+  useEffect(() => {
+    const fetchDespesaDetail = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await fetch(`http://192.168.3.11:3000/despesas/${DespesaID}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setDespesaDetail(data.despesa);
+        } else {
+          console.error('Error:', response.status);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchDespesaDetail();
+  }, [DespesaID]);
+
+  if (!despesaDetail) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <View style={styles.container}>
-      <Text>ID: {despesa.id}</Text>
-      <Text>Category: {despesa.Category}</Text>
-      <Text>Payment Method: {despesa.PaymentMethod}</Text>
-      <Text>Amount: {despesa.Amount}</Text>
+      <Text>{`DespesaID: ${despesaDetail.DespesaID}`}</Text>
+      <Text>{`Date: ${despesaDetail.Date}`}</Text>
+      <Text>{`Category: ${despesaDetail.Category}`}</Text>
+      <Text>{`Description: ${despesaDetail.Description}`}</Text>
+      <Text>{`PaymentMethod: ${despesaDetail.PaymentMethod}`}</Text>
+      <Text>{`Amount: ${despesaDetail.Amount}`}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    margin: 5,
+    flex: 1,
+    marginVertical: 20,
+    backgroundColor: '#FFFFF7',
+    padding: 16,
   },
 });
 
-export default Despesa;
+export default DespesaDetail;

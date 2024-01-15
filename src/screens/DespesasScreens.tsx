@@ -1,7 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import despesainfo from '../components/despesa';
+
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -50,6 +51,10 @@ const DespesasScreen = () => {
   const goToAddDespesa = () => {
     navigation.navigate('AddDespesa');
   };
+  const handleDespesaPress = (DespesaID) => {
+
+    navigation.navigate('despesa', { DespesaID });
+  };
 
   return (
     <View>
@@ -65,11 +70,12 @@ const DespesasScreen = () => {
         </TouchableOpacity>
       </View>
       <FlatList
-          style={{ maxHeight: 400 }} // max height
-          data={despesas}
-          keyExtractor={(item) => item.DespesaID.toString()}
-          renderItem={({ item }) => (
-            <View key={item.DespesaID} style={styles.metaContainer}>
+        style={{ maxHeight: 400 }}
+        data={despesas}
+        keyExtractor={(item) => item.DespesaID.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleDespesaPress(item.DespesaID)}>
+            <View style={styles.metaContainer}>
               <Text>{`DespesaID: ${item.DespesaID}`}</Text>
               <Text>{`Date: ${item.Date}`}</Text>
               <Text>{`Category: ${item.Category}`}</Text>
@@ -78,8 +84,9 @@ const DespesasScreen = () => {
               <Text>{`Amount: ${item.Amount}`}</Text>
               <Text>{'------------------------'}</Text>
             </View>
-          )}
-        />
+          </TouchableOpacity>
+        )}
+      />
 
       <View style={styles.add}>
         <TouchableOpacity

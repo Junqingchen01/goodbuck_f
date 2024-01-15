@@ -1,4 +1,3 @@
-// app.tsx
 
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// marin screens
 import DashboardScreens from './src/screens/DashboardScreens';
 import ChatScreens from './src/screens/ChatScreens';
 import DespesasScreen from './src/screens/DespesasScreens';
@@ -15,13 +15,22 @@ import SettingScreens from './src/screens/SettingScreens';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen  from './src/screens/RegisterScreen ';
 import MetasScreens  from './src/screens/MetasScreens';
+import EditarMeta  from './src/screens/EditarMeta';
+import FavoritoScreens  from './src/screens/FavoritoScreens';
 
+// add screens
 import AddDespesa from './src/screens/AddDespesa';
 import AddMeta from './src/screens/AddMeta';
 
+// perfil screens
 import Perfil from './src/screens/Perfil';
 import Definicoes from './src/screens/Definicoes';
 import EditarPerfil from './src/screens/EditarPerfil';
+
+// componentes screens
+import dica from './src/components/dica';
+import metainfo from './src/components/meta';
+import despesainfo from './src/components/despesa';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,6 +93,11 @@ const MyStack = () => {
         <Stack.Screen name="Perfil" component={Perfil}/>
         <Stack.Screen name="Definicoes" component={Definicoes}/>
         <Stack.Screen name="EditarPerfil" component={EditarPerfil}/>
+        <Stack.Screen name="dica" component={dica}/>
+        <Stack.Screen name="despesa" component={despesainfo}/>
+        <Stack.Screen name="meta" component={metainfo}/>
+        <Stack.Screen name="EditarMeta" component={EditarMeta}/>
+        <Stack.Screen name="FavoritoScreens" component={FavoritoScreens}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

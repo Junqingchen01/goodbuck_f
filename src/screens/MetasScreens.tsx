@@ -1,6 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable prettier/prettier */
+
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -23,7 +21,6 @@ const MetasScreen = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setMetas(data.metas);
         } else {
           console.error('Error fetching metas:', response.status);
@@ -48,6 +45,10 @@ const MetasScreen = () => {
     navigation.navigate('AddMeta');
   };
 
+  const handleMetaPress = (MetaID) => {
+    navigation.navigate('meta', { MetaID });
+  };
+  
   return (
     <View>
       <View style={styles.containerbtn}>
@@ -64,10 +65,11 @@ const MetasScreen = () => {
         </TouchableOpacity>
       </View>
       <FlatList
-        style={{ maxHeight: 400 }} // max height
+        style={{ maxHeight: 400 }}
         data={metas}
         keyExtractor={(item) => item.MetaID.toString()}
         renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleMetaPress(item.MetaID)}>
           <View key={item.MetaID} style={styles.metaContainer}>
             <Text>{`MetaID: ${item.MetaID}`}</Text>
             <Text>{`Name: ${item.Name}`}</Text>
@@ -79,6 +81,8 @@ const MetasScreen = () => {
             <Text>{`Priority: ${item.Priority}`}</Text>
             <Text>{'------------------------'}</Text>
           </View>
+          </TouchableOpacity>
+
         )}
 />
       <View style={styles.add}>

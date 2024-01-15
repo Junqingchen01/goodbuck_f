@@ -3,9 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator }
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DicaScreens = () => {
+const FavoritoScreens = () => {
   const navigation = useNavigation();
   const [dicas, setDicas] = useState([]);
+  const [favoriteDicas, setFavoriteDicas] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
@@ -21,7 +22,6 @@ const DicaScreens = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log('Data:', data);
           setDicas(data.dica || []);
         } else {
           console.error('Error:', response.status);
@@ -36,26 +36,48 @@ const DicaScreens = () => {
     }
   }, []);
 
+
   useEffect(() => {
+    const fetchFavoriteDicas = async () => {
+      try {
+        const keys = await AsyncStorage.getAllKeys();
+
+        const favoriteKeys = keys.filter((key) => key.startsWith('favorite_'));
+
+        const favoriteDicaData = await Promise.all(
+          favoriteKeys.map(async (key) => {
+            const DicaID = key.split('_')[1];
+            const DicaData = await AsyncStorage.getItem(key);
+            return { DicaID, ...JSON.parse(DicaData) };
+          })
+        );
+
+        setFavoriteDicas(favoriteDicaData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching favorite Dicas:', error);
+      }
+    };
+
+    fetchFavoriteDicas();
     fetchData();
   }, [fetchData]);
 
-  const handleDicaPress = (DicaID) => {
-    
-    navigation.navigate('dica', { DicaID });
+  const goToDica = () => {
+    navigation.navigate('Dica');
   };
 
-  const goToFavorito = () => {
-    navigation.navigate('FavoritoScreens');
+  const handleDicaPress = (DicaID) => {
+    navigation.navigate('dica', { DicaID });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.containerbtn}>
-        <TouchableOpacity style={[styles.button, styles.leftButton]}>
+        <TouchableOpacity style={[styles.button, styles.rightButton]} onPress={goToDica}>
           <Text style={styles.buttonText}>Dica</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.rightButton]}  onPress={goToFavorito}>
+        <TouchableOpacity style={[styles.button, styles.leftButton]} >
           <Text style={styles.buttonText}>Favorito</Text>
         </TouchableOpacity>
       </View>
@@ -64,7 +86,7 @@ const DicaScreens = () => {
         <ActivityIndicator style={styles.loadingIndicator} size="large" color="#3E198C" />
       ) : (
         <FlatList
-          data={dicas}
+          data={favoriteDicas}
           keyExtractor={(item) => item.DicaID.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleDicaPress(item.DicaID)}>
@@ -129,4 +151,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DicaScreens;
+export default FavoritoScreens;
