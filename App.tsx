@@ -33,6 +33,7 @@ import dica from './src/components/dica';
 import metainfo from './src/components/meta';
 import despesainfo from './src/components/despesa';
 import premium from './src/components/premium';
+import LoadingAnimation from './src/LoadingAnimation';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -68,12 +69,12 @@ const MyTabs = () => (
 );
 
 const MyStack = () => {
-  const [initialRoute, setInitialRoute] = React.useState('Login');
+  const [initialRoute, setInitialRoute] = React.useState('LoadingAnimation');
 
   React.useEffect(() => {
     const checkLoginStatus = async () => {
       const token = await AsyncStorage.getItem('token');
-      setInitialRoute(token ? 'Home' : 'Login');
+      setInitialRoute(token ? 'Home' : 'LoadingAnimation');
     };
 
     checkLoginStatus();
@@ -82,13 +83,14 @@ const MyStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
+      <Stack.Screen name="LoadingAnimation" component={LoadingAnimation} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen}/>
         <Stack.Screen
           name="Home"
           component={MyTabs}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen}/>
         <Stack.Screen name="Metas" component={MetasScreens}/>
         <Stack.Screen name="AddDespesa" component={AddDespesa}/>
         <Stack.Screen name="AddMeta" component={AddMeta}/>
