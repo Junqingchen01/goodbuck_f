@@ -13,7 +13,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://192.168.3.11:3000/perfil/login', {
+      const response = await fetch('http://193.136.56.10:3000/perfil/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,27 +50,29 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
+      <View>
       <Text style={styles.title}>Bem-vindo de volta!</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-        <Text style={styles.btntext} >Login</Text>
-      </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+          <Text style={styles.btntext} >Login</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btn} onPress={gotoRegistar}>
-        <Text style={styles.btntext} >Registar</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={gotoRegistar}>
+          <Text style={styles.btntext} >Registar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -81,13 +83,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent:'center',
     padding: 16,
-    backgroundColor: '#FFF5E8',
+    backgroundColor: '#FFFFF7',
   },
   title: {
     fontSize: 24,
     marginBottom: 16,
     textAlign: 'center',
     color: '#3E198C',
+    fontFamily: 'TeX Gyre Heros',
+    fontStyle: 'normal',
+    fontWeight: '700',
+    
 
   },
   input: {
@@ -104,8 +110,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 70,
     borderColor: '#3E198C', 
-    borderWidth: 5, 
-    borderRadius: 10,
+    borderWidth: 6, 
+    borderRadius: 25,
     marginBottom: 12,
     paddingHorizontal: 8,
     width: 238,
