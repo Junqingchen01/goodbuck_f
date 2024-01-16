@@ -13,23 +13,25 @@ To start Metro, run the following command from the _root_ of your React Native p
 ```bash
 # using npm
 npm start
-
 ```
 
 ## Step 2: Start your Application
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
 
-### Android
-
-
 ## Step 3: Modifying your App
-
 # you can use this username and password login to the app
 # username:
 chen
 # password:
 chen
+
+#  you can use this normal user to login the app for some page
+# (the different type of user will see different in the page premium)
+# username:
+user1
+# password:
+user1
 
 Now that you have successfully run the app, let's modify it.
 
