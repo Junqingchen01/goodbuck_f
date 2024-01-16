@@ -55,28 +55,6 @@ const DicaDetail = () => {
     }
   };
 
-  const handleDeleteDica = async () => {
-    try {
-        const token = await AsyncStorage.getItem('token');
-
-      const response = await fetch(`http://192.168.3.11:3000/dica/${DicaID}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        // Navigate back to the previous screen or perform any other navigation logic
-        navigation.goBack();
-      } else {
-        console.error('Error:', response.status);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   if (!dicaDetail) {
     return <Text>Loading...</Text>;
@@ -92,9 +70,7 @@ const DicaDetail = () => {
         <Text style={styles.buttonText}>{isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteDica}>
-        <Text style={styles.buttonText}>Delete Dica</Text>
-      </TouchableOpacity>
+
     </View>
   );
 };

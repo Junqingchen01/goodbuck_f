@@ -12,7 +12,10 @@ const DicaScreens = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await fetch('http://192.168.3.11:3000/dica', {
+        const response = await fetch(
+          // 'http://192.168.3.11:3000/dica'  // ip de casa
+          'http://172.23.113.65:3000/dica' // ip de escola
+          , {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

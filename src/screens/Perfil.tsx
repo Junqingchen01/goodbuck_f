@@ -16,7 +16,11 @@ const PerfilScreen = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await fetch('http://192.168.3.11:3000/perfil/user', {
+        const response = await fetch(
+          //'http://192.168.3.11:3000/perfil/user' // ipde casa
+          'http://172.23.113.65:3000/perfil/user' // ipde escola
+
+          , {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

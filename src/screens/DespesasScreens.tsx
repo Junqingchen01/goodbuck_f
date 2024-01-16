@@ -14,7 +14,10 @@ const DespesasScreen = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await fetch('http://192.168.3.11:3000/despesas', {
+        const response = await fetch(
+          // 'http://192.168.3.11:3000/despesas' // ipconfig de casa
+          'http://172.23.113.65:3000/despesas'  // ipconfig de escola
+          , {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
