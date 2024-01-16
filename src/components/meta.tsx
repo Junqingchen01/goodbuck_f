@@ -11,7 +11,7 @@ const MetaDetail = ({ route, navigation }) => {
     const fetchMetaDetail = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await fetch(`http://192.168.3.11:3000/metas/${MetaID}`, {
+        const response = await fetch(`https://backend-54nz.onrender.com/metas/${MetaID}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -51,7 +51,7 @@ const MetaDetail = ({ route, navigation }) => {
             text: 'dalect',
             onPress: async () => {
               const token = await AsyncStorage.getItem('token');
-              const response = await fetch(`http://192.168.3.11:3000/metas/${MetaID}`, {
+              const response = await fetch(`https://backend-54nz.onrender.com/metas/${MetaID}`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
@@ -79,39 +79,64 @@ const MetaDetail = ({ route, navigation }) => {
   }
 
   return (
-    <View>
-      <Text>MetaID: {metaDetail.MetaID}</Text>
-      <Text>Name: {metaDetail.Name}</Text>
-      <Text>Description: {metaDetail.Description}</Text>
-      <Text>Planned Contribution: {metaDetail.PlannedContribution}</Text>
-      <Text>Current Contribution: {metaDetail.CurrentContribution}</Text>
-      <Text>Start Date: {metaDetail.StartDate}</Text>
-      <Text>End Date: {metaDetail.EndDate}</Text>
-      <Text>Priority: {metaDetail.Priority}</Text>
-
-    
-        <TouchableOpacity style={styles.button} onPress={handleUpdateMeta}>
-          <Text style={styles.buttonText}>Update Meta</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleDeleteMeta}>
-          <Text style={styles.buttonText}>Delete Meta</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <Text style={styles.title}>Name: {metaDetail.Name}</Text>
+      <Text style={styles.text}>Description: {metaDetail.Description}</Text>
+      <Text style={styles.amount}>{metaDetail.CurrentContribution} / {metaDetail.PlannedContribution}</Text>
+      <Text style={styles.text}>Start Date: {metaDetail.StartDate}</Text>
+      <Text style={styles.text}>End Date: {metaDetail.EndDate}</Text>
+      <Text style={styles.text}>Priority: {metaDetail.Priority}</Text>
+      <Text style={styles.text}>MetaID: {metaDetail.MetaID}</Text>
+  
+      <TouchableOpacity style={styles.button} onPress={handleUpdateMeta}>
+        <Text style={styles.buttonText}>Update Meta</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleDeleteMeta}>
+        <Text style={styles.buttonText}>Delete Meta</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-
-  button: {
-    marginTop: 20,
-    backgroundColor: '#3E198C',
-    padding: 10,
-    borderRadius: 8,
+  container: {
+    textAlign: 'center', 
+    flex: 1,
+    backgroundColor: '#FFFFF7',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     alignItems: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3E198C',
+    marginBottom: 8,
+  },
+  text: {
+    fontSize: 16,
+    color: 'black',
+    marginBottom: 8,
+  },
+  button: {
+    width: 150,
+    height: 57,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: '#3E198C',
+    backgroundColor: '#E8CBF6',
+    marginVertical: 10,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
+  },
+  amount: {
+    color: '#3E198C',
+    fontWeight: 'bold',
+    fontSize: 30,
   },
 });
 

@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-
 const PerfilScreen = () => {
   const [userData, setUserData] = useState({});
   const navigation = useNavigation();
@@ -17,16 +16,15 @@ const PerfilScreen = () => {
       const token = await AsyncStorage.getItem('token');
       if (token) {
         const response = await fetch(
-          //'http://192.168.3.11:3000/perfil/user' // ipde casa
-          'http://172.23.113.65:3000/perfil/user' // ipde escola
-
-          , {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+          'https://backend-54nz.onrender.com/perfil/user',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           setUserData(data.user);
@@ -49,30 +47,43 @@ const PerfilScreen = () => {
     navigation.navigate('Login');
   };
 
+  const handlePremiumPress = () => {
+    navigation.navigate('premium');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.userDetails}>
-        <Image  source={userData.Avatar ? { uri: userData.Avatar } : require('../assets/unknowicon.png')}
-        style={styles.avatar} />
-        <Text style={styles.userName}>{userData.Name}</Text>
-        <Text style={styles.accountType}>
-          Account Type: {userData.AccountType ? userData.AccountType : 'FREE'}
-        </Text>
-        <View style={styles.perfilcontainer}>
-            <Text>Email: {userData.Email}</Text>
-            <Text>Currency Unit: {userData.CurrencyUnit}</Text>
-            <Text>User Type: {userData.UserType}</Text>
+        <Image
+          source={
+            userData.Avatar ? { uri: userData.Avatar } : require('../assets/unknowicon.png')
+          }
+          style={styles.avatar}
+        />
+        <View style={styles.userInfo}>
+          <Text style={styles.userName}>{userData.Name}</Text>
+          <TouchableOpacity onPress={handlePremiumPress}>
+            <Text style={styles.accountType}>
+              {userData.AccountType ? userData.AccountType : 'FREE'}
+            </Text>
+          </TouchableOpacity>
         </View>
-
+        <View>
+          <Text style={styles.perfilContainer}>Email: {userData.Email}</Text>
+          <Text style={styles.perfilContainer}>Currency Unit: {userData.CurrencyUnit}</Text>
+          <Text style={styles.perfilContainer}>User Type: {userData.UserType}</Text>
+        </View>
+  
         <TouchableOpacity style={styles.actionButton} onPress={handleUpdateProfile}>
-          <Text>Editar Perfil</Text>
+          <Text style={styles.actionButtonText}>Editar Perfil</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={handleLogout}>
-          <Text>Terminar Sessão</Text>
+          <Text style={styles.actionButtonText}>Terminar Sessão</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({
@@ -97,9 +108,24 @@ const styles = StyleSheet.create({
     color: '#3E198C',
   },
   accountType: {
-    fontSize: 16,
-    marginBottom: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
+    borderRadius: 50,
+    borderWidth: 2,
+    width: 80,
+    textAlign: 'center',
+    backgroundColor: '#3E198C',
+    borderColor: '#3E198C',
+  },
+  perfilContainer: {
+
+    alignItems: 'center',
+    justifyContent: 'center',
     color: '#3E198C',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   actionButton: {
     padding: 10,
@@ -110,19 +136,17 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 5,
     borderColor: '#3E198C',
+    marginBottom: 15,
+  },
+  actionButtonText: {
     color: '#3E198C',
-    fontSize: 30,
-    
-  },perfilcontainer:{
-    marginTop: 10,
-    marginBottom: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#3E198C',
-    fontSize: 30,
+    fontSize: 16,
     fontWeight: 'bold',
-
-  }
+  },userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
 });
 
 export default PerfilScreen;

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { zoomContainerMixin } from 'victory-native';
 
 const MetasScreen = () => {
   const navigation = useNavigation();
@@ -12,7 +13,7 @@ const MetasScreen = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await fetch('http://192.168.3.11:3000/metas', {
+        const response = await fetch('https://backend-54nz.onrender.com/metas', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -65,23 +66,21 @@ const MetasScreen = () => {
         </TouchableOpacity>
       </View>
       <FlatList
-        style={{ maxHeight: 400 }}
+         style={styles.flatList}
         data={metas}
         keyExtractor={(item) => item.MetaID.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleMetaPress(item.MetaID)}>
+        <TouchableOpacity onPress={() => handleMetaPress(item.MetaID)} >
           <View key={item.MetaID} style={styles.metaContainer}>
-            <Text>{`MetaID: ${item.MetaID}`}</Text>
-            <Text>{`Name: ${item.Name}`}</Text>
-            <Text>{`Description: ${item.Description}`}</Text>
-            <Text>{`Planned Contribution: ${item.PlannedContribution}`}</Text>
-            <Text>{`Current Contribution: ${item.CurrentContribution}`}</Text>
-            <Text>{`Start Date: ${item.StartDate}`}</Text>
-            <Text>{`End Date: ${item.EndDate}`}</Text>
-            <Text>{`Priority: ${item.Priority}`}</Text>
-            <Text>{'------------------------'}</Text>
+            <View style={{ flex: 1 }}>
+                <Text style={styles.title}>{`${item.Name}`}</Text>
+                <Text style={styles.category}>{`${item.Description}`}</Text>
+              </View>
+              <View style={{ marginTop:15,}}>
+                <Text style={styles.amount}>{`${item.CurrentContribution} / ${item.PlannedContribution}`}</Text>
+              </View>
           </View>
-          </TouchableOpacity>
+        </TouchableOpacity>
 
         )}
 />
@@ -136,6 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
   }, metaContainer: {
+    flexDirection: 'row',
     marginVertical: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -143,7 +143,41 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#DDD',
+    backgroundColor: '#E8CBF6',
+    
+  },title:{
+    fontSize: 25,
+    color: 'black',
+    marginLeft: 10,
+  },category:{
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
+    borderRadius: 50,
+    borderWidth: 2,
+    width: 80,
+    textAlign: 'center',
+    backgroundColor: '#3E198C',
+    borderColor: '#3E198C',
+  },amount:{
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 15,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: '#3E198C',
+    padding: 5,
+    width: 210,
+    textAlign: 'center',
+    margin: 0,
+    backgroundColor: '#E8CBF6',
   },
+  flatList:{
+    maxHeight: 400,
+    backgroundColor: '#FFFFF7',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  }
 });
 
 export default MetasScreen;

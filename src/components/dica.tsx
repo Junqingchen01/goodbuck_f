@@ -15,21 +15,21 @@ const DicaDetail = () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await fetch(
-          // `http://192.168.3.11:3000/dica/${DicaID}`
-          `http://172.23.113.65:3000/dica/${DicaID}`
-          
-          , {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-  
+          `https://backend-54nz.onrender.com/dica/${DicaID}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
+
         if (response.ok) {
           const data = await response.json();
           setDicaDetail(data);
-  
+
+          // 在这里检查是否为收藏项
           const isFav = await AsyncStorage.getItem(`favorite_${DicaID}`);
-          setIsFavorite(!!isFav); 
+          setIsFavorite(!!isFav);
         } else {
           console.error('Error:', response.status);
         }
@@ -37,10 +37,9 @@ const DicaDetail = () => {
         console.error('Error:', error);
       }
     };
-  
+
     fetchDicaDetail();
   }, [DicaID]);
-  
 
   const handleToggleFavorite = async () => {
     try {
@@ -48,17 +47,16 @@ const DicaDetail = () => {
 
       const favoriteKey = `favorite_${DicaID}`;
       const isFav = await AsyncStorage.getItem(favoriteKey);
-  
+
       if (isFav) {
         await AsyncStorage.removeItem(favoriteKey);
       } else {
-        await AsyncStorage.setItem(favoriteKey, 'true');
+        await AsyncStorage.setItem(favoriteKey, JSON.stringify(dicaDetail));
       }
     } catch (error) {
       console.error('Error:', error);
     }
   };
-
 
   if (!dicaDetail) {
     return <Text>Loading...</Text>;
@@ -66,15 +64,13 @@ const DicaDetail = () => {
 
   return (
     <View style={styles.container}>
-        <Text>{`DicaID: ${dicaDetail.dica.DicaID}`}</Text>
-        <Text>{`Title: ${dicaDetail.dica.Title}`}</Text>
-        <Text>{`Content: ${dicaDetail.dica.Content}`}</Text>
+      <Text>{`DicaID: ${dicaDetail.dica.DicaID}`}</Text>
+      <Text>{`Title: ${dicaDetail.dica.Title}`}</Text>
+      <Text>{`Content: ${dicaDetail.dica.Content}`}</Text>
 
       <TouchableOpacity style={styles.favoriteButton} onPress={handleToggleFavorite}>
         <Text style={styles.buttonText}>{isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}</Text>
       </TouchableOpacity>
-
-
     </View>
   );
 };
@@ -88,16 +84,6 @@ const styles = StyleSheet.create({
   },
   favoriteButton: {
     width: 200,
-    height: 57,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 50,
-    borderWidth: 4,
-    borderColor: '#3E198C',
-    marginTop: 20,
-  },
-  deleteButton: {
-    width: 150,
     height: 57,
     alignItems: 'center',
     justifyContent: 'center',

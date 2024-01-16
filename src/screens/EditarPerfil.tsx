@@ -15,7 +15,7 @@ const EditarPerfilScreen = () => {
     try {
       const token = await AsyncStorage.getItem('token');
 
-      const response = await fetch('http://192.168.3.11:3000/perfil', {
+      const response = await fetch('https://backend-54nz.onrender.com/perfil', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

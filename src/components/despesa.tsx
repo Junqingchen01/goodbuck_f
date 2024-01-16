@@ -10,7 +10,7 @@ const DespesaDetail = ({ route }) => {
     const fetchDespesaDetail = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await fetch(`http://192.168.3.11:3000/despesas/${DespesaID}`, {
+        const response = await fetch(`https://backend-54nz.onrender.com/despesas/${DespesaID}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -36,12 +36,13 @@ const DespesaDetail = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text>{`DespesaID: ${despesaDetail.DespesaID}`}</Text>
-      <Text>{`Date: ${despesaDetail.Date}`}</Text>
-      <Text>{`Category: ${despesaDetail.Category}`}</Text>
-      <Text>{`Description: ${despesaDetail.Description}`}</Text>
-      <Text>{`PaymentMethod: ${despesaDetail.PaymentMethod}`}</Text>
-      <Text>{`Amount: ${despesaDetail.Amount}`}</Text>
+      <Text style={styles.title} >{` ${despesaDetail.Description}`}</Text>
+      <Text style={styles.category} >{`${despesaDetail.Category}`}</Text>
+      <Text style={styles.info}>{`Amount: ${despesaDetail.Amount}`}</Text>
+      <Text style={styles.info} >{`PaymentMethod: ${despesaDetail.PaymentMethod}`}</Text>
+      <Text style={styles.subinfo}>{`Date: ${despesaDetail.Date}`}</Text>
+      <Text style={styles.subinfo}>{`DespesaID: ${despesaDetail.DespesaID}`}</Text>
+
     </View>
   );
 };
@@ -52,7 +53,34 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     backgroundColor: '#FFFFF7',
     padding: 16,
-  },
+  },title:{
+    fontSize: 30,
+    color: 'black',
+    marginLeft: 10,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },category:{
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    borderRadius: 50,
+    borderWidth: 2,
+    width: 100,
+    textAlign: 'center',
+    backgroundColor: '#3E198C',
+    borderColor: '#3E198C',
+    marginLeft: 150,
+  },info:{
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+    width: 380,
+    textAlign: 'center',
+  },subinfo:{
+    justifyContent:'flex-end',
+    fontSize: 15,
+    width: 500,
+  }
 });
 
 export default DespesaDetail;

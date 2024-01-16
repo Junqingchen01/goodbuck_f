@@ -21,7 +21,7 @@ const AddMetaScreen = () => {
     try {
       const token = await AsyncStorage.getItem('token');
 
-      const response = await fetch('http://192.168.3.11:3000/metas/', {
+      const response = await fetch('https://backend-54nz.onrender.com/metas/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -13,8 +13,7 @@ const DicaScreens = () => {
       const token = await AsyncStorage.getItem('token');
       if (token) {
         const response = await fetch(
-          // 'http://192.168.3.11:3000/dica'  // ip de casa
-          'http://172.23.113.65:3000/dica' // ip de escola
+          'https://backend-54nz.onrender.com/dica'
           , {
           method: 'GET',
           headers: {
@@ -24,7 +23,6 @@ const DicaScreens = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log('Data:', data);
           setDicas(data.dica || []);
         } else {
           console.error('Error:', response.status);
@@ -58,11 +56,11 @@ const DicaScreens = () => {
         <TouchableOpacity style={[styles.button, styles.leftButton]}>
           <Text style={styles.buttonText}>Dica</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.rightButton]}  onPress={goToFavorito}>
+        <TouchableOpacity style={[styles.button, styles.rightButton]} onPress={goToFavorito}>
           <Text style={styles.buttonText}>Favorito</Text>
         </TouchableOpacity>
       </View>
-
+  
       {loading ? (
         <ActivityIndicator style={styles.loadingIndicator} size="large" color="#3E198C" />
       ) : (
@@ -72,8 +70,7 @@ const DicaScreens = () => {
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleDicaPress(item.DicaID)}>
               <View style={styles.dicaContainer}>
-                <Text>{`DicaID: ${item.DicaID}`}</Text>
-                <Text>{`Title: ${item.Title}`}</Text>
+                <Text style={styles.title}>{`${item.Title}`}</Text>
                 <Text>{`Content: ${item.Content}`}</Text>
                 <Text>{'------------------------'}</Text>
               </View>
@@ -83,53 +80,61 @@ const DicaScreens = () => {
       )}
     </View>
   );
-};
+  };
+  
+  const styles = StyleSheet.create({
+    containerbtn: {
+      flexDirection: 'row',
+      marginHorizontal: -6,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFF7',
+    },
+    container: {
+      flex: 1,
+      marginVertical: 20,
+      backgroundColor: '#FFFFF7',
+      paddingHorizontal: 16,
+    },
+    button: {
+      width: 150,
+      height: 57,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 50,
+      borderWidth: 4,
+      borderColor: '#3E198C',
+    },
+    leftButton: {
+      backgroundColor: '#E8CBF6',
+      marginRight: -2,
+    },
+    rightButton: {
+      backgroundColor: '#FFFFF7',
+      marginLeft: -2,
+    },
+    buttonText: {
+      color: '#3E198C',
+    },
+    dicaContainer: {
+      marginVertical: 8,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      backgroundColor: '#FFF',
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: '#DDD',
+      backgroundColor: '#E8CBF6',
 
-const styles = StyleSheet.create({
-  containerbtn: {
-    flexDirection: 'row',
-    marginHorizontal: -6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFF7',
-  },
-  container: {
-    flex: 1,
-    marginVertical: 20,
-    backgroundColor: '#FFFFF7',
-  },
-  button: {
-    width: 150,
-    height: 57,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 50,
-    borderWidth: 4,
-    borderColor: '#3E198C',
-  },
-  leftButton: {
-    backgroundColor: '#E8CBF6',
-    marginRight: -2,
-  },
-  rightButton: {
-    backgroundColor: '#FFFFF7',
-    marginLeft: -2,
-  },
-  buttonText: {
-    color: '#3E198C',
-  },
-  dicaContainer: {
-    marginVertical: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#FFF',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#DDD',
-  },
-  loadingIndicator: {
-    marginTop: 20,
-  },
-});
-
-export default DicaScreens;
+    },
+    loadingIndicator: {
+      marginTop: 20,
+    },title:{
+      fontSize: 25,
+      color: '#3E198C',
+      
+    },
+  });
+  
+  export default DicaScreens;
+  

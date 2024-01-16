@@ -13,7 +13,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://172.23.113.65:3000/perfil/login', {
+      const response = await fetch('https://backend-54nz.onrender.com/perfil/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

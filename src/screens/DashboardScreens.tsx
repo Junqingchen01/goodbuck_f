@@ -12,9 +12,7 @@ const DashboardScreens = () => {
       const token = await AsyncStorage.getItem('token');
       if (token) {
         const response = await fetch(
-          // 'http://192.168.1.7:3000/dashboard/amount'
-          'http://172.23.113.65:3000/dashboard/amount'
-          
+          'https://backend-54nz.onrender.com/dashboard/amount'
           , {
           method: 'GET',
           headers: {
@@ -55,17 +53,19 @@ const DashboardScreens = () => {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        <VictoryPie
-          data={categoryTotals.map(category => ({
-            x: `${category.Category}\n$${category.TotalAmountByCategory}`,
-            y: parseFloat(category.TotalAmountByCategory),
-            color: category.color,
-          }))}
-          colorScale={categoryTotals.map(category => category.color)}
-          innerRadius={70}
-          labels={({ datum }) => `${datum.x}\n(${calculatePercentage(datum.y).toFixed(2)}%)`}
-        />
-        <Text style={styles.totalAmount}>Total: ${calculateTotalAmount().toFixed(2)}</Text>
+        <View style={styles.containerimg}>
+          <VictoryPie
+            data={categoryTotals.map(category => ({
+              x: `${category.Category}\n$${category.TotalAmountByCategory}`,
+              y: parseFloat(category.TotalAmountByCategory),
+              color: category.color,
+            }))}
+            colorScale={categoryTotals.map(category => category.color)}
+            innerRadius={70}
+            labels={({ datum }) => `${datum.x}\n(${calculatePercentage(datum.y).toFixed(2)}%)`}
+          />
+          <Text style={styles.totalAmount}>Total: ${calculateTotalAmount().toFixed(2)}</Text>
+          </View>
         <View style={styles.labelContainer}>
           {categoryTotals.map((category, index) => (
             <View key={index} style={styles.labelBoxContainer}>
@@ -95,11 +95,10 @@ const styles = StyleSheet.create({
   },
   totalAmount: {
     position: 'absolute',
-    textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',
-    top: '37%',
+
     left: '50%',
     transform: [{ translateX: -50 }, { translateY: -50 }],
   },
@@ -130,7 +129,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
     color: 'white',
-  },
+  },containerimg: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },  
 });
 
 export default DashboardScreens;

@@ -5,63 +5,57 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FavoritoScreens = () => {
   const navigation = useNavigation();
-  const [dicas, setDicas] = useState([]);
+  const [favoriteDicaIDs, setFavoriteDicaIDs] = useState([]);
   const [favoriteDicas, setFavoriteDicas] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = useCallback(async () => {
+  const fetchFavoriteDicaIDs = useCallback(async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      if (token) {
-        const response = await fetch('http://192.168.3.11:3000/dica', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setDicas(data.dica || []);
-        } else {
-          console.error('Error:', response.status);
-        }
-      } else {
-        console.error('AsyncStorage cant find token');
-      }
+      const keys = await AsyncStorage.getAllKeys();
+      const favDicaIDs = keys.filter((key) => key.startsWith('favorite_')).map((key) => key.split('_')[1]);
+      setFavoriteDicaIDs(favDicaIDs);
     } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false); 
+      console.error('Error fetching favorite Dica IDs:', error);
     }
   }, []);
 
+  const fetchDicaDetails = useCallback(async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const favoriteDicaData = await Promise.all(
+        favoriteDicaIDs.map(async (DicaID) => {
+          const response = await fetch(`https://backend-54nz.onrender.com/dica/${DicaID}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            return { DicaID, ...data.dica };
+          } else {
+            console.error('Error fetching Dica details:', response.status);
+            return { DicaID };
+          }
+        })
+      );
+
+      setFavoriteDicas(favoriteDicaData);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching Dica details:', error);
+    }
+  }, [favoriteDicaIDs]);
 
   useEffect(() => {
-    const fetchFavoriteDicas = async () => {
-      try {
-        const keys = await AsyncStorage.getAllKeys();
-
-        const favoriteKeys = keys.filter((key) => key.startsWith('favorite_'));
-
-        const favoriteDicaData = await Promise.all(
-          favoriteKeys.map(async (key) => {
-            const DicaID = key.split('_')[1];
-            const DicaData = await AsyncStorage.getItem(key);
-            return { DicaID, ...JSON.parse(DicaData) };
-          })
-        );
-
-        setFavoriteDicas(favoriteDicaData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching favorite Dicas:', error);
-      }
+    const loadData = async () => {
+      await fetchFavoriteDicaIDs();
+      await fetchDicaDetails();
     };
 
-    fetchFavoriteDicas();
-    fetchData();
-  }, [fetchData]);
+    loadData();
+  }, [fetchFavoriteDicaIDs, fetchDicaDetails]);
 
   const goToDica = () => {
     navigation.navigate('Dica');
@@ -77,7 +71,7 @@ const FavoritoScreens = () => {
         <TouchableOpacity style={[styles.button, styles.rightButton]} onPress={goToDica}>
           <Text style={styles.buttonText}>Dica</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.leftButton]} >
+        <TouchableOpacity style={[styles.button, styles.leftButton]}>
           <Text style={styles.buttonText}>Favorito</Text>
         </TouchableOpacity>
       </View>
@@ -91,9 +85,8 @@ const FavoritoScreens = () => {
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleDicaPress(item.DicaID)}>
               <View style={styles.dicaContainer}>
-                <Text>{`DicaID: ${item.DicaID}`}</Text>
-                <Text>{`Title: ${item.Title}`}</Text>
-                <Text>{`Content: ${item.Content}`}</Text>
+                <Text style={styles.title}>{`${item.Title || 'No Title'}`}</Text>
+                <Text>{`Content: ${item.Content || 'No Content'}`}</Text>
                 <Text>{'------------------------'}</Text>
               </View>
             </TouchableOpacity>
@@ -116,6 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 20,
     backgroundColor: '#FFFFF7',
+    paddingHorizontal: 16,
   },
   button: {
     width: 150,
@@ -145,9 +139,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#DDD',
+    backgroundColor: '#E8CBF6',
   },
   loadingIndicator: {
     marginTop: 20,
+  },
+  title: {
+    fontSize: 25,
+    color: '#3E198C',
   },
 });
 

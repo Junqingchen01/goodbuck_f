@@ -1,5 +1,3 @@
-// Settings.js
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,15 +16,15 @@ const SettingsScreen = () => {
       const token = await AsyncStorage.getItem('token');
       if (token) {
         const response = await fetch(
-          // 'http://192.168.3.11:3000/perfil/user'   ip de casa
-          'http://172.23.113.65:3000/perfil/user'  // ip de escola
-        , {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+          'https://backend-54nz.onrender.com/perfil/user',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           setUserData(data.user);
@@ -41,9 +39,9 @@ const SettingsScreen = () => {
     }
   };
 
-  // const goToNotifications = () => {
-  //   navigation.navigate('Notifications');
-  // };
+  const goToNotification = () => {
+    navigation.navigate('NotificationScreens');
+  };
 
   const goToPerfil = () => {
     navigation.navigate('Perfil');
@@ -53,29 +51,27 @@ const SettingsScreen = () => {
     navigation.navigate('Definicoes');
   };
 
-  const goToNotification = () => {
-    navigation.navigate('NotificationScreens');
-  }
-
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.notificationIcon} onPress={goToNotification}>
         <Image source={require('../assets/bell7.png')} />
       </TouchableOpacity>
       <View style={styles.userDetails}>
-      <Image
+        <Image
           source={userData.Avatar ? { uri: userData.Avatar } : require('../assets/unknowicon.png')}
           style={styles.avatar}
         />
+         <View style={styles.userInfo}>
         <Text style={styles.userName}>{userData.Name}</Text>
         <Text style={styles.accountType}>
-          Account Type: {userData.AccountType ? userData.AccountType : 'FREE'}
+          {userData.AccountType ? userData.AccountType : 'FREE'}
         </Text>
+      </View>
         <TouchableOpacity style={styles.settingsOption} onPress={goToPerfil}>
-          <Text>Perfil</Text>
+          <Text style={styles.optionText}>Perfil</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.settingsOption} onPress={goToDefinicoes}>
-          <Text>Definicoes</Text>
+          <Text style={styles.optionText}>Definicoes</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -110,18 +106,35 @@ const styles = StyleSheet.create({
     color: '#3E198C',
   },
   accountType: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: '#3E198C',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
+    borderRadius: 50,
+    borderWidth: 2,
+    width: 80,
+    textAlign: 'center',
+    backgroundColor: '#3E198C',
+    borderColor: '#3E198C',
+    
   },
   settingsOption: {
-    width: 150,
-    height: 57,
+    padding: 10,
+    width: 160,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
-    borderWidth: 4,
+    borderWidth: 5,
     borderColor: '#3E198C',
+    marginBottom: 15, 
+    marginTop: 15,
+  },
+  optionText: {
+    color: '#3E198C',
+  },userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
   },
 });
 

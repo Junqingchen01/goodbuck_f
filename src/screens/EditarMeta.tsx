@@ -17,7 +17,7 @@ const UpdateMeta = ({ route, navigation }) => {
     const fetchMetaDetail = async () => {
         try {
           const token = await AsyncStorage.getItem('token');
-          const response = await fetch(`http://192.168.3.11:3000/metas/${MetaID}`, {
+          const response = await fetch(`https://backend-54nz.onrender.com/metas/${MetaID}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
@@ -43,7 +43,7 @@ const UpdateMeta = ({ route, navigation }) => {
   const handleUpdateMeta = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`http://192.168.3.11:3000/metas/${MetaID}`, {
+      const response = await fetch(`https://backend-54nz.onrender.com/metas/${MetaID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

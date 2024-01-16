@@ -10,7 +10,7 @@ const RegisterScreen = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch('http://192.168.3.11:3000/perfil/register', {
+      const response = await fetch('https://backend-54nz.onrender.com/perfil/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

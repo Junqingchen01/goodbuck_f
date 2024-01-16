@@ -18,8 +18,7 @@ const AdicionarDespesaScreen = () => {
       const token = await AsyncStorage.getItem('token');
 
       const response = await fetch(
-        // 'http://192.168.3.11:3000/despesas/' ip de casa
-        'http://172.23.113.65:3000/despesas/' // ip de escola
+        'https://backend-54nz.onrender.com/despesas/'
 
         , {
         method: 'POST',
@@ -41,7 +40,7 @@ const AdicionarDespesaScreen = () => {
         setPaymentMethod('');
         setAmount('');
         setDescription('');
-        navigation.navigate('Despesas');
+        goBackAndRefresh()
       } else {
         Alert.alert('Erro ao adicionar despesa', `Status: ${response.status}`);
       }
@@ -49,6 +48,10 @@ const AdicionarDespesaScreen = () => {
       console.error('Erro durante a adição de despesa:', error);
       Alert.alert('Erro', 'Ocorreu um erro durante a adição de despesa');
     }
+  };
+
+  const goBackAndRefresh = () => {
+    navigation.goBack();
   };
 
   return (

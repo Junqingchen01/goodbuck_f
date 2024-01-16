@@ -32,7 +32,7 @@ import EditarPerfil from './src/screens/EditarPerfil';
 import dica from './src/components/dica';
 import metainfo from './src/components/meta';
 import despesainfo from './src/components/despesa';
-import notification from './src/components/notification';
+import premium from './src/components/premium';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,7 +101,7 @@ const MyStack = () => {
         <Stack.Screen name="EditarMeta" component={EditarMeta}/>
         <Stack.Screen name="FavoritoScreens" component={FavoritoScreens}/>
         <Stack.Screen name="NotificationScreens" component={NotificationScreens}/>
-        <Stack.Screen name="notification" component={notification}/>
+        <Stack.Screen name="premium" component={premium}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
