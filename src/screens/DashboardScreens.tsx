@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { VictoryPie } from 'victory-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DashboardScreens = () => {
   const [categoryTotals, setCategoryTotals] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -35,6 +36,8 @@ const DashboardScreens = () => {
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,19 +56,30 @@ const DashboardScreens = () => {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        <View style={styles.containerimg}>
-          <VictoryPie
-            data={categoryTotals.map(category => ({
-              x: `${category.Category}\n$${category.TotalAmountByCategory}`,
-              y: parseFloat(category.TotalAmountByCategory),
-              color: category.color,
-            }))}
-            colorScale={categoryTotals.map(category => category.color)}
-            innerRadius={70}
-            labels={({ datum }) => `${datum.x}\n(${calculatePercentage(datum.y).toFixed(2)}%)`}
-          />
-          <Text style={styles.totalAmount}>Total: ${calculateTotalAmount().toFixed(2)}</Text>
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : categoryTotals.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Image source={require('../assets/nodado.png')} style={styles.emptyImage} />
+            <Text style={styles.emptyText}>
+              De momento não há dados disponíveis. Por favor, adicione algumas transações primeiro.
+            </Text>
           </View>
+        ) : (
+          <View style={styles.containerimg}>
+            <VictoryPie
+              data={categoryTotals.map(category => ({
+                x: `${category.Category}\n$${category.TotalAmountByCategory}`,
+                y: parseFloat(category.TotalAmountByCategory),
+                color: category.color,
+              }))}
+              colorScale={categoryTotals.map(category => category.color)}
+              innerRadius={70}
+              labels={({ datum }) => `${datum.x}\n(${calculatePercentage(datum.y).toFixed(2)}%)`}
+            />
+            <Text style={styles.totalAmount}>Total: ${calculateTotalAmount().toFixed(2)}</Text>
+          </View>
+        )}
         <View style={styles.labelContainer}>
           {categoryTotals.map((category, index) => (
             <View key={index} style={styles.labelBoxContainer}>
@@ -81,7 +95,6 @@ const DashboardScreens = () => {
       </View>
     </ScrollView>
   );
-  
 };
 
 const styles = StyleSheet.create({
@@ -98,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',
-
+    top: '60%',
     left: '50%',
     transform: [{ translateX: -50 }, { translateY: -50 }],
   },
@@ -129,13 +142,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
     color: 'white',
-  },containerimg: {
+  },
+  containerimg: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
     marginBottom: 20,
-  },  
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyImage: {
+    width: 210,
+    height: 200,
+    marginBottom: 20,
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#555',
+  },
 });
 
 export default DashboardScreens;

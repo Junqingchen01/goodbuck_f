@@ -1,13 +1,12 @@
-
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { zoomContainerMixin } from 'victory-native';
 
 const MetasScreen = () => {
   const navigation = useNavigation();
   const [metas, setMetas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -31,6 +30,8 @@ const MetasScreen = () => {
       }
     } catch (error) {
       console.error('Error during fetch:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,9 +50,9 @@ const MetasScreen = () => {
   const handleMetaPress = (MetaID) => {
     navigation.navigate('meta', { MetaID });
   };
-  
+
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.containerbtn}>
         <TouchableOpacity
           style={[styles.button, styles.rightButton]}
@@ -65,25 +66,35 @@ const MetasScreen = () => {
           <Text style={styles.buttonText}>Metas de Poupança</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-         style={styles.flatList}
-        data={metas}
-        keyExtractor={(item) => item.MetaID.toString()}
-        renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleMetaPress(item.MetaID)} >
-          <View key={item.MetaID} style={styles.metaContainer}>
-            <View style={{ flex: 1 }}>
-                <Text style={styles.title}>{`${item.Name}`}</Text>
-                <Text style={styles.category}>{`${item.Description}`}</Text>
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : metas.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Image source={require('../assets/nodado.png')} style={styles.emptyImage} />
+          <Text style={styles.emptyText}>
+            De momento não adicionou Metas de Poupança. Para adicionar uma Meta, toque no botão abaixo.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          style={styles.flatList}
+          data={metas}
+          keyExtractor={(item) => item.MetaID.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleMetaPress(item.MetaID)}>
+              <View key={item.MetaID} style={styles.metaContainer}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.title}>{`${item.Name}`}</Text>
+                  <Text style={styles.category}>{`${item.Description}`}</Text>
+                </View>
+                <View style={{ marginTop: 15 }}>
+                  <Text style={styles.amount}>{`${item.CurrentContribution} / ${item.PlannedContribution}`}</Text>
+                </View>
               </View>
-              <View style={{ marginTop:15,}}>
-                <Text style={styles.amount}>{`${item.CurrentContribution} / ${item.PlannedContribution}`}</Text>
-              </View>
-          </View>
-        </TouchableOpacity>
-
-        )}
-/>
+            </TouchableOpacity>
+          )}
+        />
+      )}
       <View style={styles.add}>
         <TouchableOpacity
           style={[styles.button, styles.rightButton]}
@@ -134,22 +145,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-  }, metaContainer: {
+  },
+  metaContainer: {
     flexDirection: 'row',
     marginVertical: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFF', 
+    backgroundColor: '#FFF',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#DDD',
     backgroundColor: '#E8CBF6',
-    
-  },title:{
+  },
+  title: {
     fontSize: 25,
     color: 'black',
     marginLeft: 10,
-  },category:{
+  },
+  category: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 15,
@@ -159,7 +172,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: '#3E198C',
     borderColor: '#3E198C',
-  },amount:{
+  },
+  amount: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 15,
@@ -172,12 +186,27 @@ const styles = StyleSheet.create({
     margin: 0,
     backgroundColor: '#E8CBF6',
   },
-  flatList:{
+  flatList: {
     maxHeight: 400,
     backgroundColor: '#FFFFF7',
     paddingHorizontal: 16,
     paddingVertical: 12,
-  }
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyImage: {
+    width: 210,
+    height: 200,
+    marginBottom: 20,
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#555',
+  },
 });
 
 export default MetasScreen;

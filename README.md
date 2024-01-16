@@ -26,12 +26,11 @@ chen
 # password:
 chen
 
-#  you can use this normal user to login the app for some page
-# (the different type of user will see different in the page premium)
+#  you can use this new user to login the app for see the all pages without dados
 # username:
-user1
+user
 # password:
-user1
+user
 
 Now that you have successfully run the app, let's modify it.
 

@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -78,6 +79,13 @@ const FavoritoScreens = () => {
 
       {loading ? (
         <ActivityIndicator style={styles.loadingIndicator} size="large" color="#3E198C" />
+      ) : favoriteDicas.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Image source={require('../assets/nodado.png')} style={styles.emptyImage} />
+          <Text style={styles.emptyText}>
+            De momento não há Dicas favoritas. Adicione Dicas aos favoritos tocando no botão de favorito nas Dicas.
+          </Text>
+        </View>
       ) : (
         <FlatList
           data={favoriteDicas}
@@ -147,6 +155,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     color: '#3E198C',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyImage: {
+    width: 210,
+    height: 200,
+    marginBottom: 20,
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#555',
   },
 });
 
