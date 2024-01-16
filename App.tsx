@@ -17,6 +17,7 @@ import RegisterScreen  from './src/screens/RegisterScreen ';
 import MetasScreens  from './src/screens/MetasScreens';
 import EditarMeta  from './src/screens/EditarMeta';
 import FavoritoScreens  from './src/screens/FavoritoScreens';
+import NotificationScreens  from './src/screens/NotificationScreens';
 
 // add screens
 import AddDespesa from './src/screens/AddDespesa';
@@ -31,6 +32,7 @@ import EditarPerfil from './src/screens/EditarPerfil';
 import dica from './src/components/dica';
 import metainfo from './src/components/meta';
 import despesainfo from './src/components/despesa';
+import notification from './src/components/notification';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -98,6 +100,8 @@ const MyStack = () => {
         <Stack.Screen name="meta" component={metainfo}/>
         <Stack.Screen name="EditarMeta" component={EditarMeta}/>
         <Stack.Screen name="FavoritoScreens" component={FavoritoScreens}/>
+        <Stack.Screen name="NotificationScreens" component={NotificationScreens}/>
+        <Stack.Screen name="notification" component={notification}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

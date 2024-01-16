@@ -53,9 +53,13 @@ const SettingsScreen = () => {
     navigation.navigate('Definicoes');
   };
 
+  const goToNotification = () => {
+    navigation.navigate('NotificationScreens');
+  }
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.notificationIcon}>
+      <TouchableOpacity style={styles.notificationIcon} onPress={goToNotification}>
         <Image source={require('../assets/bell7.png')} />
       </TouchableOpacity>
       <View style={styles.userDetails}>

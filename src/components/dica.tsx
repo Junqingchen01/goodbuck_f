@@ -14,7 +14,11 @@ const DicaDetail = () => {
     const fetchDicaDetail = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await fetch(`http://192.168.3.11:3000/dica/${DicaID}`, {
+        const response = await fetch(
+          // `http://192.168.3.11:3000/dica/${DicaID}`
+          `http://172.23.113.65:3000/dica/${DicaID}`
+          
+          , {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

@@ -16,7 +16,7 @@ const DespesasScreen = () => {
       if (token) {
         const response = await fetch(
           // 'http://192.168.3.11:3000/despesas' // ipconfig de casa
-          'http://172.23.113.65:3000/despesas'  // ipconfig de escola
+          'https://backend-54nz.onrender.com/despesas'  // ipconfig de escola
           , {
           method: 'GET',
           headers: {
@@ -79,7 +79,6 @@ const DespesasScreen = () => {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleDespesaPress(item.DespesaID)}>
             <View style={styles.metaContainer}>
-              <Text>{`DespesaID: ${item.DespesaID}`}</Text>
               <Text>{`Date: ${item.Date}`}</Text>
               <Text>{`Category: ${item.Category}`}</Text>
               <Text>{`Description: ${item.Description}`}</Text>
