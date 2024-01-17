@@ -1,8 +1,8 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { VictoryPie } from 'victory-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const DashboardScreens = () => {
   const [categoryTotals, setCategoryTotals] = useState([]);
@@ -13,14 +13,15 @@ const DashboardScreens = () => {
       const token = await AsyncStorage.getItem('token');
       if (token) {
         const response = await fetch(
-          'https://backend-54nz.onrender.com/dashboard/amount'
-          , {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+          'https://backend-54nz.onrender.com/dashboard/amount',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           const coloredCategories = data.categoryTotals.map((category, index) => ({
@@ -41,9 +42,12 @@ const DashboardScreens = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useFocusEffect will run every time the screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   const calculateTotalAmount = () => {
     return categoryTotals.reduce((total, category) => total + parseFloat(category.TotalAmountByCategory), 0);
@@ -54,46 +58,47 @@ const DashboardScreens = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        {loading ? (
-          <Text>Loading...</Text>
-        ) : categoryTotals.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Image source={require('../assets/nodado.png')} style={styles.emptyImage} />
-            <Text style={styles.emptyText}>
-              De momento não há dados disponíveis. Por favor, adicione algumas transações primeiro.
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.containerimg}>
-            <VictoryPie
-              data={categoryTotals.map(category => ({
-                x: `${category.Category}\n$${category.TotalAmountByCategory}`,
-                y: parseFloat(category.TotalAmountByCategory),
-                color: category.color,
-              }))}
-              colorScale={categoryTotals.map(category => category.color)}
-              innerRadius={70}
-              labels={({ datum }) => `${datum.x}\n(${calculatePercentage(datum.y).toFixed(2)}%)`}
-            />
-            <Text style={styles.totalAmount}>Total: ${calculateTotalAmount().toFixed(2)}</Text>
-          </View>
-        )}
-        <View style={styles.labelContainer}>
-          {categoryTotals.map((category, index) => (
-            <View key={index} style={styles.labelBoxContainer}>
-              <View style={[styles.labelBox, { backgroundColor: category.color }]}>
-                <Text style={styles.labelText}>{`${calculatePercentage(parseFloat(category.TotalAmountByCategory)).toFixed(2)}%`}</Text>
-              </View>
-              <View style={[styles.labelBox, styles.largeLabelBox, { backgroundColor: category.color }]}>
-                <Text style={styles.labelText}>{`${category.Category}\n$${category.TotalAmountByCategory}`}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
+<ScrollView contentContainerStyle={styles.scrollContainer}>
+  <View style={styles.container}>
+    {loading ? (
+      <Text>Loading...</Text>
+    ) : categoryTotals.length === 0 ? (
+      <View style={styles.emptyContainer}>
+        <Image source={require('../assets/nodado.png')} style={styles.emptyImage} />
+        <Text style={styles.emptyText}>
+          De momento não há dados disponíveis. Por favor, adicione algumas transações primeiro.
+        </Text>
       </View>
-    </ScrollView>
+    ) : (
+      <View style={styles.containerimg}>
+        <VictoryPie
+          data={categoryTotals.map(category => ({
+            x: ` ${category.Category}\n$${category.TotalAmountByCategory}`,
+            y: parseFloat(category.TotalAmountByCategory),
+            color: category.color,
+          }))}
+          colorScale={categoryTotals.map(category => category.color)}
+          innerRadius={70}
+          labels={({ datum }) => `${datum.x}\n(${calculatePercentage(datum.y).toFixed(2)}%)`}
+        />
+        <Text style={styles.totalAmount}>Total: ${calculateTotalAmount().toFixed(2)}</Text>
+      </View>
+    )}
+    <View style={styles.labelContainer}>
+      {categoryTotals.map((category, index) => (
+        <View key={index} style={styles.labelBoxContainer}>
+          <View style={[styles.labelBox, { backgroundColor: category.color }]}>
+            <Text style={styles.labelText}>{calculatePercentage(parseFloat(category.TotalAmountByCategory)).toFixed(2)}%</Text>
+          </View>
+          <View style={[styles.labelBox, styles.largeLabelBox, { backgroundColor: category.color }]}>
+            <Text style={styles.labelText}>{`${category.Category}\n$${category.TotalAmountByCategory}`}</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  </View>
+</ScrollView>
+
   );
 };
 
@@ -124,19 +129,19 @@ const styles = StyleSheet.create({
   labelBoxContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '100%', // Largura total
-    marginBottom: 10, // Espaçamento entre as linhas
+    width: '100%',
+    marginBottom: 10,
   },
   labelBox: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
     borderRadius: 5,
-    width: '30%', // Largura da caixa da porcentagem
-    margin: 5, // Espaçamento entre as caixas
+    width: '30%',
+    margin: 5,
   },
   largeLabelBox: {
-    width: '65%', // Largura da caixa da categoria e montante
+    width: '65%',
   },
   labelText: {
     fontSize: 12,
