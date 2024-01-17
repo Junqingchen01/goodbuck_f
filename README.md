@@ -32,8 +32,10 @@ user
 # password:
 user
 
-Now that you have successfully run the app, let's modify it.
 
+Now that you have successfully run the app, let's modify it.
+# podes user nest link para ver os Requerimentos de nos app
+# https://www.dropbox.com/scl/fi/3yxw39dgdiwhi0rmeicak/Requerimentos_CMU_Goodbuck.pdf?rlkey=5p9k8hsxpcrdi3a2ynsdyn9j3&dl=0
 1. Open `App.tsx` in your text editor of choice and edit some lines.
 2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
 
